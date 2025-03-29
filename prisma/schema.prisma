@@ -20,8 +20,8 @@ model User {
 
 model Post {
   id       Int  @id @default(autoincrement())
-  author   User @relation(fields: [authorId], references: [id])
-  authorId Int 
+  author   User? @relation(fields: [authorId], references: [id])
+  authorId Int? 
 
   title String
   content String

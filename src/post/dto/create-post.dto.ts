@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePostDTO {
-  
+
   @IsNotEmpty()
   @IsString()
   @ApiProperty({ example: 'this is title' })
@@ -12,11 +12,10 @@ export class CreatePostDTO {
   @IsString()
   @ApiProperty({ example: 'this is content' })
   readonly content: string;
-
+  
   @IsOptional()
   @IsString()
-  @IsArray()
   @IsNotEmpty()
-  @ApiProperty({example: 'this is author' })
-  readonly author: string[];
+  @ApiProperty({example: 'this is authorId' })
+  readonly authorId: string;
 }
