@@ -5,10 +5,11 @@ import { PostController } from './post/post.controller';
 import { PostService } from './post/post.service';
 import { PostModule } from './post/post.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { UserModule } from './user/user.module';
 
 
 @Module({
-  imports: [PostModule, PrismaModule],
+  imports: [PostModule, PrismaModule, UserModule],
   controllers: [AppController, PostController],
   providers: [AppService, PostService],
 })

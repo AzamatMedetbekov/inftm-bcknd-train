@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreatePostDTO {
+export class UpdatePostDTO {
 
   @IsNotEmpty()
   @IsString()
@@ -12,8 +12,5 @@ export class CreatePostDTO {
   @IsString()
   @ApiProperty({ example: 'this is content' })
   readonly content: string;
-
-  @IsNotEmpty()
-  @ApiProperty({example: 'authorId' })
-  readonly authorId: number;
+  
 }
