@@ -12,6 +12,14 @@ export class PostService {
     return await this.prisma.post.findMany();
   }
 
+  async findPostsByUser(id: number) {
+    return await this.prisma.post.findMany({
+      where: {
+        authorId: id,
+      },
+    });
+  }
+
   async updatePost(id: number, updatePostDTO: UpdatePostDTO){
     return await this.prisma.post.update({
       where:{id: id},
@@ -27,6 +35,7 @@ export class PostService {
       data: {
         title: createPostDTO.title,
         content: createPostDTO.content, 
+        authorId: createPostDTO.authorId,
       },
     });
   }

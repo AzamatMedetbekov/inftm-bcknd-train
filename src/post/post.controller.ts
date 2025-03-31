@@ -20,6 +20,12 @@ export class PostController {
         return this.PostService.getPost(+id);
     }
 
+    @Get(':authorId')
+    @ApiOperation({ summary: 'get a post using user id' })
+    findUnique(@Param('authorId', ParseIntPipe) authorId:number) {
+        return this.PostService.findPostsByUser(authorId);
+    }
+
     @Post()
     @ApiOperation({ summary: 'create a post' })
     create(@Body() createPostDTO: CreatePostDTO) {

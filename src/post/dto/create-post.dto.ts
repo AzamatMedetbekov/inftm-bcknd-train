@@ -12,10 +12,8 @@ export class CreatePostDTO {
   @IsString()
   @ApiProperty({ example: 'this is content' })
   readonly content: string;
-  
-  @IsOptional()
-  @IsString()
+
   @IsNotEmpty()
-  @ApiProperty({example: 'this is authorId' })
+  @ApiProperty({example: 'authorId' })
   readonly authorId: number;
 }

@@ -6,8 +6,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor(private prisma:PrismaService){}
 
-  async create(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto) {
     return await this.prisma.user.create({});
+  }
+
+  async findUserPosts(id: number) {
+    return await this.prisma.user.findUnique({
+      where: { id: id },
+      include: { posts: true },
+    });
   }
 
   async findAll() {
@@ -20,7 +27,7 @@ export class UserService {
     });
   }
 
-  async remove(id: number) {
+  async removeUser(id: number) {
     return await this.prisma.user.delete({
       where:{
         id: id,
