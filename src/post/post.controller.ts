@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDTO } from './dto/create-post.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { UpdatePostDTO } from './dto/update-post.dto';
 
 @Controller('post')
 export class PostController {
@@ -15,25 +16,19 @@ export class PostController {
 
     @Get(':id')
     @ApiOperation({ summary: 'get a post using id' })
-    findOne(@Param('id') id:string) {
+    findOne(@Param('id', ParseIntPipe) id:number) {
         return this.PostService.getPost(+id);
-    }
-
-    @Get(":id")
-    @ApiOperation({ summary: 'get user using id' })
-    findUnique(@Param('id') id:string){
-        return this.PostService.findUser(+id);
     }
 
     @Post()
     @ApiOperation({ summary: 'create a post' })
-    create(@Body() CreatePostDTO: CreatePostDTO) {
-    return this.PostService.createPost(CreatePostDTO);
+    create(@Body() createPostDTO: CreatePostDTO) {
+    return this.PostService.createPost(createPostDTO);
     }
 
     @Delete(':id')
     @ApiOperation({ summary: 'delete the post using id' })
-    async delete(@Param('id') id: string) {
+    async delete(@Param('id', ParseIntPipe) id: number) {
     await this.PostService.deletePost(+id);  
     return { message: `Post with id ${id} has been deleted` };  
 }
@@ -41,7 +36,7 @@ export class PostController {
 
     @Patch(':id')
     @ApiOperation({ summary: 'update the post using id' })
-    async update(@Param('id') id:string,@Body() updatePostDTO: CreatePostDTO) {
+    async update(@Param('id', ParseIntPipe) id:number,@Body() updatePostDTO: UpdatePostDTO) {
     await this.PostService.updatePost(+id, updatePostDTO);
     return {message: `Post with id ${id} has been updated`}
     }
