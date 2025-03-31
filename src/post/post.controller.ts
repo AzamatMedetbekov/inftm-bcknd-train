@@ -27,8 +27,8 @@ export class PostController {
 
     @Post()
     @ApiOperation({ summary: 'create a post' })
-    create(@Body() CreatePostDTO: CreatePostDTO) {
-    return this.PostService.createPost(CreatePostDTO);
+    create(@Body() createPostDTO: CreatePostDTO) {
+    return this.PostService.createPost(createPostDTO);
     }
 
     @Delete(':id')
