@@ -3,12 +3,12 @@ import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdatePostDTO {
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @ApiProperty({ example: 'this is title' })
-  readonly title: string;
+  readonly title?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @ApiProperty({ example: 'this is content' })
   readonly content: string;
