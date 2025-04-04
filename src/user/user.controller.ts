@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/strategy/jwtAuth.guard';
 
 @Controller('user')
 export class UserController {
@@ -14,9 +15,9 @@ export class UserController {
   }
 
   @Get(":id")
-  @ApiOperation({summary: "see user's posts"})
-  findUnique(@Param('id', ParseIntPipe) id:number){
-  return this.userService.findUserPosts(id);
+  @ApiOperation({ summary: "see user's posts" })
+  findUnique(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findUserPosts(id);
   }
 
   @Post()
@@ -29,7 +30,7 @@ export class UserController {
   @Delete(':id')
   @ApiOperation({ summary: "delete the user" })
   async remove(@Param('id', ParseIntPipe) id: number) {
-  await this.userService.removeUser(+id);
-  return {message: `User with id ${id} has been deleted`}
+    await this.userService.removeUser(+id);
+    return { message: `User with id ${id} has been deleted` }
   }
 }
