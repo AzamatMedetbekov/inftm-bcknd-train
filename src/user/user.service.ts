@@ -7,14 +7,14 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma:PrismaService){}
+  constructor(private prisma: PrismaService) { }
 
-  async createUser(createUserDto: CreateUserDto):Promise<CreateUserDto>{
-    const hashedPassword = await bcrypt.hash(createUserDto.password,10);
+  async createUser(createUserDto: CreateUserDto): Promise<CreateUserDto> {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     return await this.prisma.user.create({
       data: {
         username: createUserDto.username,
-        password: hashedPassword, 
+        password: hashedPassword,
       },
     }).catch((error) => {
       if (error instanceof Prisma.PrismaClientKnownRequestError)
@@ -25,26 +25,26 @@ export class UserService {
     });
   }
 
-  async findUserPosts(id: number){
+  async findUserPosts(id: number) {
     return await this.prisma.user.findUnique({
       where: { id: id },
       include: { posts: true },
     })
-    .then((user) =>{ 
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
-      return user.posts;
-    })
+      .then((user) => {
+        if (!user) {
+          throw new NotFoundException('User not found');
+        }
+        return user.posts;
+      })
   }
 
-  async findAll():Promise<GetUserDto[]>{
-  return await this.prisma.user.findMany();
+  async findAll(): Promise<GetUserDto[]> {
+    return await this.prisma.user.findMany();
   }
 
-  async findUser(id: number):Promise<GetUserDto>{
+  async findUser(id: number) {
     const useri = await this.prisma.user.findUnique({
-      where: {id: id},
+      where: { id: id },
     });
     if (!useri) {
       throw new NotFoundException('ID is not found');
@@ -54,22 +54,58 @@ export class UserService {
 
   async removeUser(id: number) {
     return await this.prisma.user.delete({
-      where:{
+      where: {
         id: id,
       },
     }).catch((error) => {
-      if(error instanceof Prisma.PrismaClientKnownRequestError)
+      if (error instanceof Prisma.PrismaClientKnownRequestError)
         if (error.code === 'P2025')
           throw new NotFoundException('User not found');
       throw new InternalServerErrorException();
     });
   }
 
+  async findRefreshToken(id:number, refreshToken:string){
+    const token = await this.prisma.refreshToken.findUnique({
+      where: {
+          userId: id,
+          token: refreshToken,
+      },
+    });
+    if (!token) {
+      throw new NotFoundException('Refresh token not found');
+    }
+    return token;
+  }
+
+  async saveRefreshToken(id: number, refreshToken: string, expiresAt: Date) {
+    return await this.prisma.refreshToken.upsert({
+      where: {
+         userId: id, 
+      },
+      update: {
+        token: refreshToken,
+        expiresAt,
+      },
+      create: {
+        userId: id,
+        token: refreshToken,
+        expiresAt,
+      },
+    });
+  }
+
+  async logout(userId: number, token: string): Promise<void> {
+    await this.prisma.refreshToken.delete({
+      where: { userId, token: token },
+    });
+  }
+
 
   // username, password, etc. for signin.
-  async findOne(username: string){
+  async findOne(username: string) {
     return this.prisma.user.findUnique({
-      where: {username: username},
+      where: { username: username },
     });
   }
 }

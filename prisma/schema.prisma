@@ -18,6 +18,7 @@ model User {
   posts    Post[]
   password String
   username String @unique
+  refreshToken RefreshToken?
 }
 
 model Post {
@@ -27,4 +28,12 @@ model Post {
 
   title   String
   content String
+}
+
+model RefreshToken {
+  token     String  @unique
+  userId    Int  @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+
 }
