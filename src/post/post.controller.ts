@@ -1,19 +1,13 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDTO } from './dto/create-post.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { UpdatePostDTO } from './dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/strategy/jwtAuth.guard';
 
 @Controller('post')
 export class PostController {
     constructor(private PostService: PostService) { }
-
-    @Get('debug')
-    getUser(@Request() req) {
-        console.log('User in req:', req.user); 
-        return req.user;
-    }
 
     @Get()
     @ApiOperation({ summary: 'get posts' })
@@ -33,12 +27,16 @@ export class PostController {
         return this.PostService.findPostsByUser(authorId);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Post()
     @ApiOperation({ summary: 'create a post' })
     create(@Body() createPostDTO: CreatePostDTO) {
         return this.PostService.createPost(createPostDTO);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     @ApiOperation({ summary: 'delete the post using id' })
     async delete(@Param('id', ParseIntPipe) id: number) {
@@ -46,7 +44,8 @@ export class PostController {
         return { message: `Post with id ${id} has been deleted` };
     }
 
-
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Patch(':id')
     @ApiOperation({ summary: 'update the post using id' })
     async update(@Param('id', ParseIntPipe) id: number, @Body() updatePostDTO: UpdatePostDTO) {

@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/strategy/jwtAuth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
+
 
   @Get()
   @ApiOperation({ summary: "see all users" })
@@ -20,13 +21,16 @@ export class UserController {
     return this.userService.findUserPosts(id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: "create a user" })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
-
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: "delete the user" })
   async remove(@Param('id', ParseIntPipe) id: number) {

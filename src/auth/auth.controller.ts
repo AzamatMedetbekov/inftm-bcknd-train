@@ -2,6 +2,8 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards }
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { JwtAuthGuard } from './strategy/jwtAuth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +16,7 @@ export class AuthController {
     }
 
     @Post('refresh')
-    async refreshToken(@Body('refreshToken') refreshToken: string) {
-        return await this.authService.refreshToken(refreshToken);
+    async refreshToken(@Body() refreshToken: RefreshTokenDto) {
+        return await this.authService.refreshToken(refreshToken.refreshToken);
     }
 }
