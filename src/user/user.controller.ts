@@ -20,15 +20,7 @@ export class UserController {
   findUnique(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findUserPosts(id);
   }
-
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Post()
-  @ApiOperation({ summary: "create a user" })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
-  }
-
+  
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')

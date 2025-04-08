@@ -4,17 +4,20 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from "bcryptjs";
 import { GetUserDto } from './dto/get-user.dto';
 import { Prisma } from '@prisma/client';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) { }
 
-  async createUser(createUserDto: CreateUserDto): Promise<CreateUserDto> {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+  async registerUser(RegisterUserDto: RegisterUserDto): Promise<RegisterUserDto> {
+    const hashedPassword = await bcrypt.hash(RegisterUserDto.password, 10);
     return await this.prisma.user.create({
       data: {
-        username: createUserDto.username,
+        email: RegisterUserDto.email, 
+        googleId: RegisterUserDto.googleId,
         password: hashedPassword,
+        username: RegisterUserDto.username,
       },
     }).catch((error) => {
       if (error instanceof Prisma.PrismaClientKnownRequestError)

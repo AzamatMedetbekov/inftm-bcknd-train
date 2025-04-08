@@ -7,9 +7,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 import { JwtAuthGuard } from './strategy/jwtAuth.guard';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { GoogleSignInStrategy } from './strategy/google-siginin.strategy';
+import { GoogleSignUpStrategy } from './strategy/google-signup.strategy';
 @Module({
   controllers: [AuthController],
-  providers: [AuthService,JwtAuthGuard,JwtStrategy],
+  providers: [AuthService,JwtAuthGuard,JwtStrategy, GoogleSignInStrategy, GoogleSignUpStrategy, PrismaService],
   imports: [UserModule, ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
