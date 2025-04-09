@@ -113,7 +113,7 @@ export class AuthService {
             const payload: PayloadDto & { iat } & { exp } = this.jwtService.verify(
                 refreshToken,
                 {
-                    secret: this.configService.get<string>('JWT_SECRET'),
+                    secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
                 },
             );
 
