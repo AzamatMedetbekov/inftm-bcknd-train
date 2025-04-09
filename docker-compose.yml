@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: nest-app
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: master_owner
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: master
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
